@@ -1,0 +1,118 @@
+@extends('layouts.master')
+@php
+    $pageTitle ="Profile";
+@endphp
+@section('content')
+    <div class="page-heading">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="page-title">{{ $pageTitle??'' }}</h1>
+            </div>
+            <div class="col-sm-6 pt-4 text-right">
+
+            </div>
+        </div>
+    </div>
+    <div class="page-content fade-in-up">
+        <div class="ibox rounded">
+            <div class="ibox-body">
+                <form method="post" action="{{ route('app.user.profile_update',$user->id) }}" enctype="multipart/form-data" autocomplete="off">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header bg-info">
+                                    <h5 class="card-title">Profile information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                               id="name" name="name" value="{{ $user->name??old('name') }}"
+                                               placeholder="Enter user name" />
+                                        @error('name')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email </label>
+                                        <input class="form-control" value="{{ $user->email??old('email') }}" readonly />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                               id="password" name="password"
+                                               placeholder="Enter password" />
+                                        @error('password')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password_confirmation">Confirm Password</label>
+                                        <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror"
+                                               id="password_confirmation" name="password_confirmation"
+                                               placeholder="Confirm password" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>{{--//.col-md-8--}}
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header bg-info">
+                                    <h5 class="card-title">Avatar & Contact </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="avatar">Profile Avatar</label>
+                                        <input type="file" name="avatar" id="avatar" data-default-file="{{ asset($user->image) }}" class="form-control dropify" data-height="170">
+                                        @error('avatar')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contact">Contact</label>
+                                        <input type="text" class="form-control @error('contact') is-invalid @enderror"
+                                               id="contact" name="contact" value="{{ $user->mobile??old('contact') }}"
+                                               placeholder="Enter contact" />
+                                        @error('contact')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-center mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-arrow-circle-o-up"></i> Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endsection
+    @push('css')
+        <link rel="stylesheet" href="{{ asset('assets/backend/vendors/dropify-master/dist/css/dropify.min.css') }}">
+        <link href="{{ asset('assets/backend/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
+    @endpush
+    @push('js')
+        <script src="{{ asset('assets/backend/vendors/dropify-master/dist/js/dropify.min.js') }}"></script>
+        <script src="{{ asset('assets/backend/vendors/select2/dist/js/select2.full.min.js') }}" type="text/javascript"></script>
+    @endpush
+    @push('customJS')
+        <script type="text/javascript">
+            $('.dropify').dropify();
+            $('#role').select2();
+        </script>
+    @endpush
